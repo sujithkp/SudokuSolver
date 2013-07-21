@@ -1,0 +1,5 @@
+D:\Projects\SudokuSolver\trunk\SudokuSolver\SudokuSolver\bin\Debug\SudokuSolver.dll
+D:\Projects\SudokuSolver\trunk\SudokuSolver\SudokuSolver\bin\Debug\SudokuSolver.pdb
+D:\Projects\SudokuSolver\trunk\SudokuSolver\SudokuSolver\obj\Debug\SudokuSolver.dll
+D:\Projects\SudokuSolver\trunk\SudokuSolver\SudokuSolver\obj\Debug\SudokuSolver.pdb
+D:\Projects\SudokuSolver\trunk\SudokuSolver\SudokuSolver\obj\Debug\SudokuSolver.csprojResolveAssemblyReference.cache
