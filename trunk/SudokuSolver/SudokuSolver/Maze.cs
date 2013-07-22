@@ -48,6 +48,32 @@ namespace SudokuSolver
             return list;
         }
 
+        private List<int> GetMissingValues(IEnumerable<int> values)
+        {
+            var result = new List<int>();
+
+            for (int i = 1; i <= 9; i++)
+                if (!values.Contains(i))
+                    result.Add(i);
+
+            return result;
+        }
+
+        public List<int> GetMissingValuesInRow(int row)
+        {
+            return GetMissingValues(GetRow(row).Select(x => x.Value));
+        }
+
+        public List<int> GetMissingValuesInCol(int col)
+        {
+            return GetMissingValues(GetColumn(col).Select(x => x.Value));
+        }
+
+        public List<int> GetMissingValuesInSquare(int row, int col)
+        {
+            return GetMissingValues(GetSquare(row, col).Select(x => x.Value));
+        }
+
         public List<Cell> GetColumn(int col)
         {
             var list = new List<Cell>();
@@ -77,8 +103,14 @@ namespace SudokuSolver
             /*
             for (int i = 0; i < 9; Console.WriteLine(""), i++)
                 GetRow(i).ForEach(x => Console.Write(x.Value + "\t"));
-             * */
+            */
+        }
 
+        public bool IsValid(int val, int row, int col)
+        {
+            return (GetMissingValuesInRow(row).Contains(val)
+                || GetMissingValuesInCol(col).Contains(val)
+                || GetMissingValuesInSquare(row, col).Contains(val));
         }
 
         public List<Cell> GetEmptyCells()

@@ -6,10 +6,14 @@ namespace SudokuSolverUI
 {
     public partial class Form1 : Form
     {
+        private string formtext;
+
         public Form1()
         {
             InitializeComponent();
             ShowControls();
+            updateUI(TestInput.EvilInput[0]);
+            formtext = this.Text;
         }
 
         private Control[,] controls = new Control[9, 9];
@@ -24,7 +28,7 @@ namespace SudokuSolverUI
                         Width = 20,
                         Left = (j == 0) ? 40 : controls[i, j - 1].Left + controls[i, j - 1].Width + 5,
                         Top = (i == 0) ? 30 : controls[i - 1, j].Top + controls[i - 1, j].Height + 5,
-                        Text = "0",
+                        Text = "",
                         Font = new Font(FontFamily.GenericSerif, 15),
                     });
                     (controls[i, j] as TextBox).GotFocus += Form1_GotFocus;
@@ -56,9 +60,12 @@ namespace SudokuSolverUI
             int[,] nums = new int[9, 9];
             for (int i = 0; i < 9; i++)
                 for (int j = 0; j < 9; j++)
-                    nums[i, j] = int.Parse(controls[i, j].Text);
+                    nums[i, j] = int.Parse(controls[i, j].Text == string.Empty ? "0" : controls[i, j].Text);
 
+            var startTime = DateTime.Now;
             var maze = new SudokuSolver.Maze(nums);
+            var timeElapsed = DateTime.Now.Subtract(startTime);
+
             try
             {
                 nums = new SudokuSolver.SudokuSolver(maze).Solve();
@@ -70,25 +77,31 @@ namespace SudokuSolverUI
                 MessageBox.Show("too hard to solve.");
             }
 
+            this.Text = formtext + "  -  " + timeElapsed.TotalMilliseconds.ToString() + " ms";
         }
 
         private void updateUI(int[,] nums)
         {
             for (int i = 0; i < 9; i++)
                 for (int j = 0; j < 9; j++)
-                    controls[i, j].Text = nums[i, j].ToString();
+                    controls[i, j].Text = nums[i, j] != 0 ? nums[i, j].ToString() : string.Empty;
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             for (int i = 0; i < 9; i++)
                 for (int j = 0; j < 9; j++)
-                    controls[i, j].Text = "0";
+                    controls[i, j].Text = string.Empty;
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Sudoku Solver \n\t by Sujith." + Environment.NewLine + Environment.NewLine + "(this is not final version.)");
+            MessageBox.Show("Sudoku Solver \n\t by Sujith." + Environment.NewLine + Environment.NewLine + "(this is not final version)");
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            updateUI(TestInput.HardInput[0]);
         }
     }
 }

@@ -27,11 +27,14 @@ namespace SudokuSolver
 
         private readonly Maze maze;
 
+        private bool BruteForceHasEnabled { get; set; }
+
         public SudokuSolver(Maze maze)
         {
             this.posblties = new List<int>(new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 });
             this.CellStates = new List<CellState>();
             this.maze = maze;
+            BruteForceHasEnabled = true;
         }
 
         public int[,] Solve()
@@ -39,15 +42,30 @@ namespace SudokuSolver
             var cells = this.maze.GetEmptyCells();
 
             foreach (var cell in cells)
+            {
                 CellStates.Add(new CellState()
                 {
                     Cell = cell,
                     Possibilities = new List<int>(this.posblties)
                 });
 
+                cell.Changed += new EventHandler<CellValueChangingEventArgs>(cell_Changed);
+            }
+
             privateSolve(CellStates);
 
             return maze.ToArray();
+        }
+
+        void cell_Changed(object sender, CellValueChangingEventArgs e)
+        {
+            if (!BruteForceHasEnabled)
+                return;
+
+            var cell = sender as Cell;
+
+            if (!maze.IsValid(e.Value, cell.Row, cell.Column))
+                throw new Exception();
         }
 
         private List<int> GetEffectivePossibilities(CellState cstate, List<Cell> cell)
@@ -125,14 +143,7 @@ namespace SudokuSolver
             } while (cellStates.Count != startlength);
         }
 
-        /// <summary>
-        /// This is a reursive function Recursive function. 
-        /// computes possibilities of each cell.
-        /// computes possibilities of each cell based on its row, column and group.
-        /// Throws TooHardToSolveException if the sudoku is too complex.
-        /// </summary>
-        /// <param name="state"></param>
-        private void privateSolve(List<CellState> state)
+        private void solvewithchecks(List<CellState> state, bool checkon)
         {
             int startlength = state.Count;
             update(state);
@@ -178,11 +189,39 @@ namespace SudokuSolver
                 }
             }
 
-            if (state.Count != 0 && state.Count == startlength)
-                throw new TooHardToSolveException() { PresentState = maze.ToArray(), };
+            if (state.Count > 0)
+                solvewithchecks(state, checkon);
 
-            else if (state.Count > 0)
-                privateSolve(state);
+            if (state.Count != 0 && state.Count == startlength)
+                if (!TryWithBruttForce(state))
+                    throw new TooHardToSolveException() { PresentState = maze.ToArray(), };
+
+
+        }
+
+
+        private bool TryWithBruttForce(List<CellState> state)
+        {
+            BruteForceHasEnabled = true;
+
+            //var st = state.OrderBy(x => x.Possibilities.Count).ToList();
+
+
+
+            BruteForceHasEnabled = false;
+            return false;
+        }
+
+        /// <summary>
+        /// This is a reursive function Recursive function. 
+        /// computes possibilities of each cell.
+        /// computes possibilities of each cell based on its row, column and group.
+        /// Throws TooHardToSolveException if the sudoku is too complex.
+        /// </summary>
+        /// <param name="state"></param>
+        private void privateSolve(List<CellState> state)
+        {
+            solvewithchecks(state, false);
         }
     }
 }
