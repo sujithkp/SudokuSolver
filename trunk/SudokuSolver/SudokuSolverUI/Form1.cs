@@ -12,7 +12,7 @@ namespace SudokuSolverUI
         {
             InitializeComponent();
             ShowControls();
-            updateUI(TestInput.EvilInput[0]);
+            updateUI(TestInput.EasyInput[0]);
             formtext = this.Text;
         }
 
@@ -102,6 +102,26 @@ namespace SudokuSolverUI
         private void button3_Click(object sender, EventArgs e)
         {
             updateUI(TestInput.HardInput[0]);
+        }
+
+        private void easyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            updateUI(TestInput.EasyInput[0]);
+        }
+
+        private void mediumToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            updateUI(TestInput.MediumInput[0]);
+        }
+
+        private void hardToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            updateUI(TestInput.HardInput[0]);
+        }
+
+        private void evilToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            updateUI(TestInput.EvilInput[0]);
         }
     }
 }

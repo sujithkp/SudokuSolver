@@ -106,9 +106,9 @@ namespace SudokuSolver
             */
         }
 
-        public bool IsValid(int val, int row, int col)
+        public bool IsInValid(int val, int row, int col)
         {
-            return (GetMissingValuesInRow(row).Contains(val)
+            return !(GetMissingValuesInRow(row).Contains(val)
                 || GetMissingValuesInCol(col).Contains(val)
                 || GetMissingValuesInSquare(row, col).Contains(val));
         }

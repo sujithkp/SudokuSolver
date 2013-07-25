@@ -34,7 +34,7 @@ namespace SudokuSolver
             this.posblties = new List<int>(new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 });
             this.CellStates = new List<CellState>();
             this.maze = maze;
-            BruteForceHasEnabled = true;
+            BruteForceHasEnabled = false;
         }
 
         public int[,] Solve()
@@ -64,7 +64,7 @@ namespace SudokuSolver
 
             var cell = sender as Cell;
 
-            if (!maze.IsValid(e.Value, cell.Row, cell.Column))
+            if (maze.IsInValid(e.Value, cell.Row, cell.Column))
                 throw new Exception();
         }
 
@@ -189,17 +189,19 @@ namespace SudokuSolver
                 }
             }
 
-            if (state.Count > 0)
-                solvewithchecks(state, checkon);
-
             if (state.Count != 0 && state.Count == startlength)
                 if (!TryWithBruttForce(state))
-                    throw new TooHardToSolveException() { PresentState = maze.ToArray(), };
+                   throw new TooHardToSolveException() { PresentState = maze.ToArray(), };
 
-
+            if (state.Count > 0 && state.Count != startlength)
+                solvewithchecks(state, checkon);
         }
 
-
+        /// <summary>
+        /// not implemented.
+        /// </summary>
+        /// <param name="state"></param>
+        /// <returns></returns>
         private bool TryWithBruttForce(List<CellState> state)
         {
             BruteForceHasEnabled = true;
