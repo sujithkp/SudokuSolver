@@ -8,3 +8,8 @@ F:\Sujith\GitHub\SudokuSolver\trunk\SudokuSolver\SudokuSolver\obj\Debug\SudokuSo
 F:\Sujith\GitHub\SudokuSolver\trunk\SudokuSolver\SudokuSolver\bin\Debug\SudokuSolver.dll
 F:\Sujith\GitHub\SudokuSolver\trunk\SudokuSolver\SudokuSolver\bin\Debug\SudokuSolver.pdb
 F:\Sujith\GitHub\SudokuSolver\trunk\SudokuSolver\SudokuSolver\obj\Debug\SudokuSolver.pdb
+F:\SudokuSolver\SudokuSolver\bin\Debug\SudokuSolver.dll
+F:\SudokuSolver\SudokuSolver\bin\Debug\SudokuSolver.pdb
+F:\SudokuSolver\SudokuSolver\obj\Debug\SudokuSolver.dll
+F:\SudokuSolver\SudokuSolver\obj\Debug\SudokuSolver.pdb
+F:\SudokuSolver\SudokuSolver\obj\Debug\SudokuSolver.csprojResolveAssemblyReference.cache

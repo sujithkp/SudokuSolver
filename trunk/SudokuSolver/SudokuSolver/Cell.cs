@@ -1,22 +1,12 @@
 ﻿using System;
 
-public class CellValueChangingEventArgs : EventArgs
-{
-    public int Value { get; private set; }
-
-    public CellValueChangingEventArgs(int num)
-    {
-        Value = num;
-    }
-}
-
 namespace SudokuSolver
 {
     public class Cell
     {
         private int num;
 
-        public event EventHandler<CellValueChangingEventArgs> Changed;
+        public static event EventHandler<EventArgs> ValueChanged;
 
         public Cell(int row, int column, int value)
         {
@@ -34,17 +24,15 @@ namespace SudokuSolver
             get { return num; }
             set
             {
-                if (num != 0 && value != 0)
-                    throw new Exception();
-
-                if (num == 0 && value != 0)
-                {
-                    if (Changed != null)
-                        Changed(this, new CellValueChangingEventArgs(value));
-
-                    num = value;
-                }
+                num = value;
+                NotifyValueChanged();
             }
+        }
+
+        private void NotifyValueChanged()
+        {
+            if (ValueChanged != null)
+                ValueChanged(this, new EventArgs());
         }
     }
 }

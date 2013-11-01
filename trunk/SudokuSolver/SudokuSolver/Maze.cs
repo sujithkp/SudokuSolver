@@ -1,13 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace SudokuSolver
 {
     public class Maze
     {
         private Cell[,] maze;
+
+        public List<Cell> GetCells()
+        {
+            var cells = new List<Cell>();
+
+            foreach (var c in maze)
+                cells.Add(c);
+
+            return cells;
+        }
 
         public Maze(int[,] maze)
         {
@@ -96,14 +105,6 @@ namespace SudokuSolver
                     list.Add(this.maze[j, i]);
 
             return list;
-        }
-
-        public void print()
-        {
-            /*
-            for (int i = 0; i < 9; Console.WriteLine(""), i++)
-                GetRow(i).ForEach(x => Console.Write(x.Value + "\t"));
-            */
         }
 
         public bool IsInValid(int val, int row, int col)

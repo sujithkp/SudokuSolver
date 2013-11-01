@@ -46,9 +46,12 @@
   <ItemGroup>
     <Compile Include="Cell.cs" />
     <Compile Include="Maze.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="MazeState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SecondLevel.cs" />
     <Compile Include="SudokuSolver.cs" />
+    <Compile Include="SudokuValidator.cs" />
+    <Compile Include="ThirdLevel.cs" />
     <Compile Include="TooHardToSolveException.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
