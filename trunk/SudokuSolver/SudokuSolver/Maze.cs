@@ -125,5 +125,35 @@ namespace SudokuSolver
 
             return list;
         }
+
+        public string GetSquateName(int row, int col)
+        {
+            if (row < 3 && col < 3)
+                return "A";
+
+            if (row < 3 && col < 6)
+                return "B";
+
+            if (row < 3 && col < 9)
+                return "C";
+
+            if (row < 6 && col < 3)
+                return "D";
+
+            if (row < 6 && col < 6)
+                return "E";
+
+            if (row < 6 && col < 9)
+                return "F";
+
+            if (row < 9 && col < 3)
+                return "G";
+
+            if (row < 9 && col < 6)
+                return "H";
+
+
+            return "I";
+        }
     }
 }

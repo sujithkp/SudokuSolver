@@ -1,12 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using SudokuSolver;
 
 namespace SudokuSolverUI
 {
     public partial class SudokuUI : Form
     {
         private string formtext;
+
+        private LogViewer Logger;
 
         public SudokuUI()
         {
@@ -17,6 +21,12 @@ namespace SudokuSolverUI
         }
 
         private Control[,] controls = new Control[9, 9];
+
+        private void ShowLog(IList<StepInfo> steps)
+        {
+            foreach (var step in steps)
+                Logger.ShowLog(step);
+        }
 
         private void ShowControls()
         {
@@ -30,14 +40,10 @@ namespace SudokuSolverUI
                         Top = (i == 0) ? 30 : controls[i - 1, j].Top + controls[i - 1, j].Height + 5,
                         Text = "",
                         Font = new Font(FontFamily.GenericSerif, 15),
+                        MaxLength = 1,
                     });
                     (controls[i, j] as TextBox).GotFocus += Form1_GotFocus;
-                    (controls[i, j] as TextBox).Leave += Form1_Leave;
                 }
-        }
-
-        void Form1_Leave(object sender, EventArgs e)
-        {
         }
 
         void Form1_GotFocus(object sender, EventArgs e)
@@ -61,20 +67,22 @@ namespace SudokuSolverUI
 
             var startTime = DateTime.Now;
             var maze = new SudokuSolver.Maze(nums);
-            var timeElapsed = DateTime.Now.Subtract(startTime);
 
             try
             {
-                nums = new SudokuSolver.SudokuSolver(maze).Solve();
-                updateUI(nums);
-            }
-            catch (SudokuSolver.TooHardToSolveException ex)
-            {
-                updateUI(ex.PresentState);
-                MessageBox.Show("too hard to solve." + Environment.NewLine + ex.CellsSolved + " cells solved.");
-            }
+                IList<StepInfo> steps = null;
+                nums = new SudokuSolver.SudokuSolver(maze).SolveAndGetSteps(out steps);
 
-            //this.Text = formtext + "  -  " + timeElapsed.TotalMilliseconds.ToString() + " ms";
+                if (Logger != null) ShowLog(steps);
+
+                var timeElapsed = DateTime.Now.Subtract(startTime);
+                updateUI(nums);
+                timeElapsedLbl.Text = timeElapsed.TotalMilliseconds + " ms.";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("logic error :( ");
+            }
         }
 
         private void updateUI(int[,] nums)
@@ -82,10 +90,14 @@ namespace SudokuSolverUI
             for (int i = 0; i < 9; i++)
                 for (int j = 0; j < 9; j++)
                     controls[i, j].Text = nums[i, j] != 0 ? nums[i, j].ToString() : string.Empty;
+
+            timeElapsedLbl.Text = string.Empty;
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
+            timeElapsedLbl.Text = string.Empty;
+
             for (int i = 0; i < 9; i++)
                 for (int j = 0; j < 9; j++)
                     controls[i, j].Text = string.Empty;
@@ -93,7 +105,7 @@ namespace SudokuSolverUI
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Sudoku Solver \n\t by Sujith." + Environment.NewLine + Environment.NewLine);
+            MessageBox.Show("written by Sujith." + Environment.NewLine + Application.ProductVersion);
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -119,6 +131,12 @@ namespace SudokuSolverUI
         private void toolStripMenuItem5_Click(object sender, EventArgs e)
         {
             updateUI(TestInput.EvilInput[0]);
+        }
+
+        private void showLogToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            (Logger = LogViewer.GetInstance()).Show();
+            Logger.BringToFront();
         }
     }
 }

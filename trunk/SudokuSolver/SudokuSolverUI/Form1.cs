@@ -38,9 +38,6 @@ namespace SudokuSolverUI
 
         void Form1_Leave(object sender, EventArgs e)
         {
-            var ctrl = sender as TextBox;
-            if (ctrl.Text == string.Empty)
-                ctrl.Text = "0";
         }
 
         void Form1_GotFocus(object sender, EventArgs e)
@@ -74,7 +71,7 @@ namespace SudokuSolverUI
             catch (SudokuSolver.TooHardToSolveException ex)
             {
                 updateUI(ex.PresentState);
-                MessageBox.Show("too hard to solve.");
+                MessageBox.Show("too hard to solve." + Environment.NewLine + ex.CellsSolved + " cells solved.");
             }
 
             this.Text = formtext + "  -  " + timeElapsed.TotalMilliseconds.ToString() + " ms";
@@ -100,26 +97,6 @@ namespace SudokuSolverUI
         }
 
         private void button3_Click(object sender, EventArgs e)
-        {
-            updateUI(TestInput.HardInput[0]);
-        }
-
-        private void easyToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            updateUI(TestInput.EasyInput[0]);
-        }
-
-        private void mediumToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            updateUI(TestInput.MediumInput[0]);
-        }
-
-        private void hardToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            updateUI(TestInput.HardInput[0]);
-        }
-
-        private void evilToolStripMenuItem_Click(object sender, EventArgs e)
         {
             updateUI(TestInput.EvilInput[0]);
         }

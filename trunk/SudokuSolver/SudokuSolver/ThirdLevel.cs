@@ -37,7 +37,6 @@ namespace SudokuSolver
                 Possibilities = null,
                 TriedValues = null,
             });
-
         }
 
         private void PerformSpeculation(List<CellState> cellState)
@@ -55,6 +54,18 @@ namespace SudokuSolver
 
             Speculations.Push(newSpeculation);
             smallestSpec.Cell.Value = newSpeculation.TriedValues.First();
+
+            if (needSteps)
+            {
+                Steps.Add(new StepInfo(
+                    Step.SPECULATE,
+                    smallestSpec.Cell.Row,
+                    smallestSpec.Cell.Column,
+                    smallestSpec.Cell.Value,
+                    string.Format("The cell ({0},{1}) has these possibilities " + string.Join(",", smallestSpec.Possibilities),
+                    smallestSpec.Cell.Row, smallestSpec.Cell.Column) + string.Format(" Lets speculate with {0}.", smallestSpec.Cell.Value)));
+
+            }
         }
 
         private void HandleSpeculationError()
@@ -62,7 +73,20 @@ namespace SudokuSolver
             SpecInfo lastspeculatedCell = null;
 
             while ((lastspeculatedCell = Speculations.Pop()).Possibilities == null)
+            {
                 lastspeculatedCell.Cell.Value = 0;
+
+                if (needSteps)
+                {
+                    Steps.Add(new StepInfo(
+                        Step.RESET,
+                        lastspeculatedCell.Cell.Row,
+                        lastspeculatedCell.Cell.Column,
+                        lastspeculatedCell.Cell.Value,
+                        string.Format("Clearing the cell ({0},{1}) because of previous speculation error.",
+                        lastspeculatedCell.Cell.Row, lastspeculatedCell.Cell.Column)));
+                }
+            }
 
             var triedValues = lastspeculatedCell.TriedValues;
             var nextvalue = lastspeculatedCell.Possibilities.FirstOrDefault(x => !triedValues.Contains(x));
@@ -70,7 +94,7 @@ namespace SudokuSolver
             if (nextvalue == 0)
             {
                 if (Speculations.Count == 0)
-                    throw new Exception("logic error.");
+                    throw new Exception("Invalid sudoku !");
 
                 HandleSpeculationError();
                 return;
@@ -80,6 +104,18 @@ namespace SudokuSolver
             Speculations.Push(lastspeculatedCell);
 
             lastspeculatedCell.Cell.Value = nextvalue;
+
+            if (needSteps)
+            {
+                Steps.Add(new StepInfo(
+                    Step.SPECULATE,
+                    lastspeculatedCell.Cell.Row,
+                    lastspeculatedCell.Cell.Column,
+                    lastspeculatedCell.Cell.Value,
+                    string.Format("Respeculating the cell ({0},{1}) with next value {2}.",
+                    lastspeculatedCell.Cell.Row, lastspeculatedCell.Cell.Column, lastspeculatedCell.Cell.Value)));
+            }
+
         }
 
     }

@@ -13,9 +13,23 @@ namespace SudokuSolver
 
         private readonly Maze maze;
 
+        private bool needSteps;
+
+        private IList<StepInfo> Steps;
+
         public SudokuSolver(Maze maze)
         {
+            StepInfo.ResetCounter();
             this.maze = maze;
+        }
+
+        public int[,] SolveAndGetSteps(out IList<StepInfo> steps)
+        {
+            steps = new List<StepInfo>();
+            needSteps = true;
+            this.Steps = steps;
+
+            return Solve();
         }
 
         public int[,] Solve()
@@ -28,8 +42,9 @@ namespace SudokuSolver
             Cell.ValueChanged -= new EventHandler<EventArgs>(CellValueChangedWhileSpeculating);
             Cell.ValueChanged -= new EventHandler<EventArgs>(Cell_ValueChanged);
 
+            if (!SudokuValidator.validate(maze))
+                throw new Exception("Logic error :(");
 
-            SudokuValidator.validate(maze);
             return maze.ToArray();
         }
 
@@ -74,6 +89,18 @@ namespace SudokuSolver
                     if (needtoUpdateCellState = (cs.Possibilities.Count == 1))
                     {
                         cell.Value = cs.Possibilities.First();
+
+                        if (needSteps)
+                        {
+                            Steps.Add(new StepInfo(
+                                Step.SET,
+                                cell.Row,
+                                cell.Column,
+                                cell.Value,
+                                string.Format("Cell ({1},{2}) has only one possibility and that is {0}.", cell.Value, cell.Row, cell.Column)
+                                ));
+                        }
+
                         break;
                     }
 

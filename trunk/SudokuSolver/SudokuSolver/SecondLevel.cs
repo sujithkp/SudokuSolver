@@ -15,6 +15,18 @@ namespace SudokuSolver
                 if (ps.Count == 1)
                 {
                     state.Cell.Value = ps.First();
+
+                    if (needSteps)
+                    {
+                        Steps.Add(new StepInfo(
+                            Step.SET,
+                            state.Cell.Row,
+                            state.Cell.Column,
+                            state.Cell.Value,
+                            string.Format("The cell ({0},{1}) can take these values : {2} ", state.Cell.Row, state.Cell.Column, string.Join(",", state.Possibilities)) +
+                            string.Format("but the Square containing the cell ({0},{1}) can have the value {2} only here", state.Cell.Row, state.Cell.Column, state.Cell.Value)
+                            ));
+                    }
                     return true;
                 }
 
@@ -24,6 +36,18 @@ namespace SudokuSolver
                 if (ps.Count == 1)
                 {
                     state.Cell.Value = ps.First();
+
+                    if (needSteps)
+                    {
+                        Steps.Add(new StepInfo(
+                            Step.SET,
+                            state.Cell.Row,
+                            state.Cell.Column,
+                            state.Cell.Value,
+                            string.Format("The cell ({0},{1}) can take these values : {2} ", state.Cell.Row, state.Cell.Column, string.Join(",", state.Possibilities)) +
+                            string.Format("but the Row containing the cell ({0},{1}) can have the value {2} only here.", state.Cell.Row, state.Cell.Column, state.Cell.Value)
+                            ));
+                    }
                     return true;
                 }
 
@@ -33,6 +57,18 @@ namespace SudokuSolver
                 if (ps.Count == 1)
                 {
                     state.Cell.Value = ps.First();
+
+                    if (needSteps)
+                    {
+                        Steps.Add(new StepInfo(
+                            Step.SET,
+                            state.Cell.Row,
+                            state.Cell.Column,
+                            state.Cell.Value,
+                            string.Format("The cell ({0},{1}) can take these values : {2} ", state.Cell.Row, state.Cell.Column, string.Join(",", state.Possibilities)) +
+                            string.Format("but the Column containing the cell ({0},{1}) can have the value {2} only here", state.Cell.Row, state.Cell.Column, state.Cell.Value)
+                            ));
+                    }
                     return true;
                 }
             }
